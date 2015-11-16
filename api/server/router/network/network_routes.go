@@ -157,6 +157,28 @@ func (n *networkRouter) postNetworkDisconnect(ctx context.Context, w http.Respon
 	return n.backend.DisconnectContainerFromNetwork(disconnect.Container, nw)
 }
 
+func (n *networkRouter) postNetworkModify(ctx context.Context, w http.ResponseWriter, r *http.Request, vars map[string]string) error {
+	var modify types.NetworkModify
+	if err := httputils.ParseForm(r); err != nil {
+		return err
+	}
+
+	if err := httputils.CheckForJSON(r); err != nil {
+		return err
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&modify); err != nil {
+		return err
+	}
+
+	nw, err := n.daemon.FindNetwork(vars["id"])
+	if err != nil {
+		return err
+	}
+
+	return nw.ModifyOptions(modify.Options)
+}
+
 func (n *networkRouter) deleteNetwork(ctx context.Context, w http.ResponseWriter, r *http.Request, vars map[string]string) error {
 	if err := httputils.ParseForm(r); err != nil {
 		return err

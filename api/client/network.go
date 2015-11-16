@@ -237,6 +237,29 @@ func (cli *DockerCli) CmdNetworkInspect(args ...string) error {
 	return nil
 }
 
+// CmdNetworkModify modifies the options an existing network with a given name
+//
+// Usage: docker network modify <NETWORK-NAME> KEY=VAL [KEY=VAL...]
+func (cli *DockerCli) CmdNetworkModify(args ...string) error {
+	cmd := Cli.Subcmd("network modify", []string{"NETWORK-NAME KEY=VAL [KEY=VAL...]"}, "Modifies the options of an network with a name specified by the user", false)
+
+	cmd.Require(flag.Min, 2)
+	err := cmd.ParseFlags(args, true)
+	if err != nil {
+		return err
+	}
+
+	nwId := cmd.Arg(0)
+	nwOpts := opts.NewMapOpts(nil, nil)
+	for _, keyval := range cmd.Args()[1:] {
+		nwOpts.Set(keyval)
+	}
+
+	nc := types.NetworkModify{Options: nwOpts.GetAll()}
+	_, _, err = readBody(cli.call("POST", "/networks/" + nwId + "/modify", nc, nil))
+	return err
+}
+
 // Consolidates the ipam configuration as a group from different related configurations
 // user can configure network with multiple non-overlapping subnets and hence it is
 // possible to corelate the various related parameters and consolidate them.
@@ -366,6 +389,7 @@ func networkUsage() string {
 		"connect":    "Connect container to a network",
 		"disconnect": "Disconnect container from a network",
 		"inspect":    "Display detailed network information",
+		"modify":     "Modify the options of a network",
 		"ls":         "List all networks",
 		"rm":         "Remove a network",
 	}

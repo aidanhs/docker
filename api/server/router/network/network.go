@@ -39,6 +39,7 @@ func (r *networkRouter) initRoutes() {
 		local.NewPostRoute("/networks/create", r.controllerEnabledMiddleware(r.postNetworkCreate)),
 		local.NewPostRoute("/networks/{id:.*}/connect", r.controllerEnabledMiddleware(r.postNetworkConnect)),
 		local.NewPostRoute("/networks/{id:.*}/disconnect", r.controllerEnabledMiddleware(r.postNetworkDisconnect)),
+		local.NewPostRoute("/networks/{id:.*}/modify", r.controllerEnabledMiddleware(r.postNetworkModify)),
 		// DELETE
 		local.NewDeleteRoute("/networks/{id:.*}", r.controllerEnabledMiddleware(r.deleteNetwork)),
 	}

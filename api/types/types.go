@@ -393,3 +393,8 @@ type NetworkConnect struct {
 type NetworkDisconnect struct {
 	Container string
 }
+
+// NetworkModify represents the keys and values to be used to modify the network
+type NetworkModify struct {
+	Options map[string]string `json:"options"`
+}
