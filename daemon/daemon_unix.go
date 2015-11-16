@@ -493,6 +493,7 @@ func initBridgeDriver(controller libnetwork.NetworkController, config *Config) e
 		libnetwork.NetworkOptionGeneric(options.Generic{
 			netlabel.GenericData: netOption,
 			netlabel.EnableIPv6:  config.Bridge.EnableIPv6,
+			netlabel.IgnoreSvcs:  true,
 		}),
 		libnetwork.NetworkOptionIpam("default", "", v4Conf, v6Conf),
 		libnetwork.NetworkOptionDeferIPv6Alloc(deferIPv6Alloc))

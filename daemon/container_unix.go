@@ -822,7 +822,7 @@ func (container *Container) buildCreateEndpointOptions(n libnetwork.Network) ([]
 		createOptions []libnetwork.EndpointOption
 	)
 
-	if n.Name() == "bridge" || container.NetworkSettings.IsAnonymousEndpoint {
+	if container.NetworkSettings.IsAnonymousEndpoint {
 		createOptions = append(createOptions, libnetwork.CreateOptionAnonymous())
 	}
 
